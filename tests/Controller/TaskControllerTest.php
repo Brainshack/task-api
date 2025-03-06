@@ -9,13 +9,11 @@ use Doctrine\ORM\EntityManagerInterface;
 class TaskControllerTest extends WebTestCase
 {
     private $client;
-    private $entityManager;
 
     protected function setUp(): void
     {
         parent::setUp();
         $this->client = static::createClient();
-        $this->entityManager = self::getContainer()->get(EntityManagerInterface::class);
     }
 
     protected function tearDown(): void

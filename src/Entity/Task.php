@@ -11,6 +11,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\HasLifecycleCallbacks]
 class Task
 {
+    public const STATUS_PENDING = 'pending';
+    public const STATUS_IN_PROGRESS = 'in_progress';
+    public const STATUS_COMPLETED = 'completed';
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -25,7 +29,7 @@ class Task
     private ?string $description = null;
 
     #[ORM\Column(length: 20)]
-    #[Assert\Choice(choices: ['pending', 'in_progress', 'completed'])]
+    #[Assert\Choice(choices: [self::STATUS_PENDING, self::STATUS_IN_PROGRESS, self::STATUS_COMPLETED])]
     private string $status = 'pending';
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]

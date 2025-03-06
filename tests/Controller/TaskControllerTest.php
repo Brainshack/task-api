@@ -2,6 +2,7 @@
 
 namespace App\Tests\Controller;
 
+use App\Entity\Task;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -70,6 +71,48 @@ class TaskControllerTest extends WebTestCase
         $this->assertEquals(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
         $responseData = json_decode($this->client->getResponse()->getContent(), true);
         $this->assertIsArray($responseData);
+    }
+
+    public function testListTasksWithStatusFilter(): void
+    {
+        $taskData = [
+            'title' => 'Compelted Task', // Empty title should fail validation
+            'status' => Task::STATUS_COMPLETED // Invalid status should fail validation
+        ];
+
+        $this->client->request(
+            'POST',
+            '/api/tasks',
+            [],
+            [],
+            ['CONTENT_TYPE' => 'application/json'],
+            json_encode($taskData)
+        );
+
+        $completedTaskData = json_decode($this->client->getResponse()->getContent(), true);
+
+        $taskData = [
+            'title' => 'Pending Task', // Empty title should fail validation
+            'status' => Task::STATUS_PENDING // Invalid status should fail validation
+        ];
+
+        $this->client->request(
+            'POST',
+            '/api/tasks',
+            [],
+            [],
+            ['CONTENT_TYPE' => 'application/json'],
+            json_encode($taskData)
+        );
+
+        $this->client->request('GET', '/api/tasks?status=' . TASK::STATUS_COMPLETED);
+
+        $this->assertEquals(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        $responseData = json_decode($this->client->getResponse()->getContent(), true);
+        $this->assertIsArray($responseData);
+        $this->assertCount(1, $responseData);
+
+        $this->assertEquals($completedTaskData['id'], $responseData[0]['id']);
     }
 
     public function testShowTask(): void

@@ -56,9 +56,9 @@ A RESTful API built with Symfony for managing tasks. The API uses SQLite as its 
     "title": "Task Title",
     "description": "Task Description",
     "status": "pending",
-    "due_date": "2024-12-31T12:00:00+00:00",
-    "created_at": "2024-03-04T09:00:00+00:00",
-    "updated_at": "2024-03-04T09:00:00+00:00"
+    "due_date": "2024-12-31 12:00:00",
+    "created_at": "2024-03-04 09:00:00",
+    "updated_at": "2024-03-04 09:00:00"
 }
 ```
 

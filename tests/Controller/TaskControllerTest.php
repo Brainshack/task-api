@@ -4,7 +4,6 @@ namespace App\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
-use Doctrine\ORM\EntityManagerInterface;
 
 class TaskControllerTest extends WebTestCase
 {
@@ -67,7 +66,7 @@ class TaskControllerTest extends WebTestCase
     public function testListTasks(): void
     {
         $this->client->request('GET', '/api/tasks');
-        
+
         $this->assertEquals(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
         $responseData = json_decode($this->client->getResponse()->getContent(), true);
         $this->assertIsArray($responseData);
@@ -89,7 +88,7 @@ class TaskControllerTest extends WebTestCase
 
         // Then retrieve it
         $this->client->request('GET', '/api/tasks/' . $task['id']);
-        
+
         $this->assertEquals(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
         $responseData = json_decode($this->client->getResponse()->getContent(), true);
         $this->assertEquals($task['id'], $responseData['id']);
@@ -108,7 +107,7 @@ class TaskControllerTest extends WebTestCase
             json_encode($taskData)
         );
         $task = json_decode($this->client->getResponse()->getContent(), true);
-        
+
         // Then update it
         $updateData = [
             'title' => 'Updated Task',
@@ -122,7 +121,7 @@ class TaskControllerTest extends WebTestCase
             ['CONTENT_TYPE' => 'application/json'],
             json_encode($updateData)
         );
-        
+
         $this->assertEquals(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
         $responseData = json_decode($this->client->getResponse()->getContent(), true);
         $this->assertEquals($updateData['title'], $responseData['title']);
@@ -142,11 +141,11 @@ class TaskControllerTest extends WebTestCase
             json_encode($taskData)
         );
         $task = json_decode($this->client->getResponse()->getContent(), true);
-        
+
         // Then delete it
         $this->client->request('DELETE', '/api/tasks/' . $task['id']);
         $this->assertEquals(Response::HTTP_NO_CONTENT, $this->client->getResponse()->getStatusCode());
-        
+
         // Verify it's gone
         $this->client->request('GET', '/api/tasks/' . $task['id']);
         $this->assertEquals(Response::HTTP_NOT_FOUND, $this->client->getResponse()->getStatusCode());
